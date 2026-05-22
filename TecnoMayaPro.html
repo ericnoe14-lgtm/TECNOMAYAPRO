@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<title>TecnoMaya</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0A0E1A;font-family:'Rajdhani',sans-serif;color:#E8F0FE;padding-bottom:80px}
+input,select,button{font-family:'Rajdhani',sans-serif;font-size:15px}
+input,select{background:#0D1525;border:1px solid #1E2A3A;border-radius:8px;padding:10px 12px;
+  color:#E8F0FE;width:100%;-webkit-appearance:none;appearance:none;outline:none}
+select option{background:#0D1525}
+button{cursor:pointer;border:none;font-weight:700}
+.page{display:none;padding:16px;animation:fi .25s ease}
+.page.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* HEADER */
+#header{position:sticky;top:0;z-index:100;background:#0D1525;border-bottom:1px solid #1E2A3A;
+  padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 16px #00000088}
+.logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#00D4FF,#0066AA);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  box-shadow:0 0 14px #00D4FF55;flex-shrink:0}
+.logo-text{font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;letter-spacing:2px;color:#E8F0FE}
+.logo-text span{color:#00D4FF}
+.logo-sub{font-size:9px;color:#00E676;letter-spacing:1px;margin-top:1px}
+
+/* NAV BOTTOM */
+#nav{position:fixed;bottom:0;left:0;right:0;background:#0D1525;border-top:1px solid #1E2A3A;
+  display:flex;z-index:100;box-shadow:0 -4px 20px #00000066}
+.nav-btn{flex:1;background:none;border:none;padding:10px 4px;display:flex;flex-direction:column;
+  align-items:center;gap:3px;position:relative}
+.nav-btn .nav-icon{font-size:20px}
+.nav-btn .nav-label{font-size:10px;color:#7B8FAE;font-weight:700;letter-spacing:.5px}
+.nav-btn.active .nav-label{color:#00D4FF}
+.nav-btn.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;
+  background:#00D4FF;border-radius:0 0 3px 3px;box-shadow:0 0 8px #00D4FF}
+.nav-badge{position:absolute;top:6px;right:22%;background:#FF4444;color:#fff;border-radius:10px;
+  font-size:9px;padding:1px 5px;font-weight:800;line-height:1.4}
+
+/* CARDS */
+.card{background:#111827;border:1px solid #1E2A3A;border-radius:14px;padding:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.grid1{display:grid;gap:10px;margin-bottom:14px}
+
+/* KPI */
+.kpi{background:#111827;border:1px solid #1E2A3A;border-radius:14px;padding:14px 16px;
+  position:relative;overflow:hidden}
+.kpi-circle{position:absolute;top:-18px;right:-18px;width:76px;height:76px;border-radius:50%}
+.kpi-icon{font-size:22px;margin-bottom:4px}
+.kpi-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#7B8FAE}
+.kpi-value{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;margin:3px 0;word-break:break-word}
+.kpi-sub{font-size:11px;color:#7B8FAE}
+.kpi-trend{font-size:11px;font-weight:700;margin-top:2px}
+
+/* FORM */
+.form-box{background:#111827;border:1px solid #1E2A3A;border-radius:14px;padding:16px;margin-bottom:14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;letter-spacing:1px;color:#7B8FAE;margin-bottom:4px}
+.ganancia-preview{background:#00E67222;border:1px solid #00E67244;border-radius:8px;
+  padding:8px 12px;color:#00E676;font-size:13px;font-weight:700;margin-bottom:10px}
+.btn-primary{padding:10px 24px;border-radius:8px;font-size:14px;font-weight:800}
+.btn-accent{background:linear-gradient(135deg,#00D4FF,#0099CC);color:#000;border-radius:10px;
+  padding:10px 18px;font-size:14px;font-weight:800}
+.btn-purple{background:linear-gradient(135deg,#A855F7,#7C3AED);color:#fff;border-radius:10px;
+  padding:10px 18px;font-size:14px;font-weight:800}
+
+/* TAG */
+.tag{border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+
+/* LISTA OPERACIONES */
+.op-card{background:#111827;border:1px solid #1E2A3A;border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.op-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.op-info{flex:1;min-width:0}
+.op-meta{display:flex;gap:8px;align-items:center;margin-bottom:4px;flex-wrap:wrap}
+.op-nombre{font-size:14px;font-weight:700;margin-bottom:2px}
+.op-nota{font-size:11px;color:#3D4F6E}
+.op-nums{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
+.op-num{font-size:12px}
+.del-btn{background:none;border:none;color:#FF4444;font-size:20px;padding:0 2px;flex-shrink:0}
+
+/* INVENTARIO */
+.inv-card{background:#111827;border:1px solid #1E2A3A;border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.inv-card.bajo{border-color:#FF444466}
+.inv-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.inv-nombre{font-size:14px;font-weight:700}
+.inv-alert{font-size:11px;font-weight:700;color:#FF4444;margin-top:2px}
+.inv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.inv-cell{text-align:center}
+.inv-cell-label{font-size:10px;color:#7B8FAE;margin-bottom:4px}
+.inv-cell-val{font-size:13px;font-weight:700}
+.stock-ctrl{display:flex;align-items:center;gap:6px;justify-content:center}
+.stock-btn{width:28px;height:28px;border-radius:5px;font-size:16px;line-height:1;border:none}
+.stock-num{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;min-width:22px;text-align:center}
+.cat-header{font-size:11px;color:#7B8FAE;letter-spacing:2px;text-transform:uppercase;margin:12px 0 8px}
+
+/* TABLA */
+.tbl-wrap{overflow-x:auto;border-radius:14px;background:#111827;border:1px solid #1E2A3A;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{background:#0D1525;color:#7B8FAE;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  padding:10px 12px;text-align:left;font-weight:700;white-space:nowrap}
+td{padding:10px 12px;font-size:12px;border-top:1px solid #1E2A3A;white-space:nowrap}
+tr:nth-child(even) td{background:#0D152522}
+
+/* BARCHART */
+.bar-wrap{display:flex;align-items:flex-end;gap:5px;height:72px;margin-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bar-fill{width:100%;border-radius:3px 3px 0 0}
+.bar-lbl{font-size:9px;color:#7B8FAE;white-space:nowrap}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:12px}
+.prog-top{display:flex;justify-content:space-between;margin-bottom:4px}
+.prog-bar-bg{height:6px;background:#1E2A3A;border-radius:4px}
+.prog-bar{height:100%;border-radius:4px}
+
+/* SEARCH */
+.search-wrap{margin-bottom:10px}
+.search-input{background:#111827;border:1px solid #1E2A3A;border-radius:8px;
+  padding:9px 14px;color:#E8F0FE;font-size:14px;outline:none;width:100%}
+.filter-wrap{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.filter-btn{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:700;
+  border:1px solid;text-transform:capitalize;transition:all .15s}
+
+/* SPINNER */
+.spinner-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:14px}
+.spinner{width:44px;height:44px;border:3px solid #1E2A3A;border-top-color:#00D4FF;
+  border-radius:50%;animation:spin .8s linear infinite}
+.spinner-txt{color:#7B8FAE;letter-spacing:2px;font-size:13px}
+
+/* ERROR */
+.error-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:80vh;gap:14px;padding:24px;text-align:center}
+
+.section-title{font-family:'Orbitron',sans-serif;font-size:15px;color:#E8F0FE;margin-bottom:4px}
+.section-sub{font-size:12px;color:#7B8FAE;margin-bottom:16px}
+.info-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="logo-icon">📱</div>
+    <div>
+      <div class="logo-text">TECNO<span>MAYA</span></div>
+      <div class="logo-sub" id="db-status">CARGANDO...</div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:#7B8FAE" id="hoy-fecha"></div>
+</div>
+
+<div id="pg-dashboard" class="page active"></div>
+<div id="pg-ops"       class="page"></div>
+<div id="pg-inv"       class="page"></div>
+<div id="pg-reportes"  class="page"></div>
+
+<nav id="nav">
+  <button class="nav-btn active" onclick="goPage('dashboard')" id="nb-dashboard">
+    <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+  </button>
+  <button class="nav-btn" onclick="goPage('ops')" id="nb-ops">
+    <span class="nav-icon">💳</span><span class="nav-label">Operaciones</span>
+  </button>
+  <button class="nav-btn" onclick="goPage('inv')" id="nb-inv">
+    <span class="nav-icon">📦</span><span class="nav-label">Inventario</span>
+    <span class="nav-badge" id="stock-badge" style="display:none"></span>
+  </button>
+  <button class="nav-btn" onclick="goPage('reportes')" id="nb-reportes">
+    <span class="nav-icon">📆</span><span class="nav-label">Reportes</span>
+  </button>
+</nav>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════
+const fmt = n => "L " + Number(n||0).toLocaleString("es-HN",{minimumFractionDigits:2,maximumFractionDigits:2});
+const today = () => new Date().toISOString().split("T")[0];
+const wkLbl = d => {
+  const dt = new Date(d+"T12:00:00"), sw = new Date(dt);
+  sw.setDate(dt.getDate()-dt.getDay());
+  return sw.toLocaleDateString("es-HN",{day:"2-digit",month:"short"});
+};
+const pct = (a,b) => b===0 ? 0 : ((a-b)/b)*100;
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+// ═══════════════════════════════════════════════════════════
+// INDEXEDDB
+// ═══════════════════════════════════════════════════════════
+let _db = null;
+function openDB(){
+  return new Promise((res,rej)=>{
+    if(_db) return res(_db);
+    const r = indexedDB.open("tecnomaya_db",1);
+    r.onupgradeneeded = e => {
+      const db = e.target.result;
+      if(!db.objectStoreNames.contains("sales")){
+        const s = db.createObjectStore("sales",{keyPath:"id"});
+        s.createIndex("date","date",{unique:false});
+      }
+      if(!db.objectStoreNames.contains("inventory"))
+        db.createObjectStore("inventory",{keyPath:"id"});
+    };
+    r.onsuccess = e => { _db = e.target.result; res(_db); };
+    r.onerror   = e => rej(e.target.error);
+  });
+}
+const dbAll = async store => {
+  const db = await openDB();
+  return new Promise((res,rej)=>{
+    const r = db.transaction(store,"readonly").objectStore(store).getAll();
+    r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);
+  });
+};
+const dbPut = async(store,rec) => {
+  const db = await openDB();
+  return new Promise((res,rej)=>{
+    const r = db.transaction(store,"readwrite").objectStore(store).put(rec);
+    r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);
+  });
+};
+const dbDel = async(store,id) => {
+  const db = await openDB();
+  return new Promise((res,rej)=>{
+    const r = db.transaction(store,"readwrite").objectStore(store).delete(id);
+    r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);
+  });
+};
+const dbCount = async store => {
+  const db = await openDB();
+  return new Promise((res,rej)=>{
+    const r = db.transaction(store,"readonly").objectStore(store).count();
+    r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);
+  });
+};
+const dbBulk = async(store,rows) => {
+  const db = await openDB();
+  return new Promise((res,rej)=>{
+    const tx = db.transaction(store,"readwrite"), os = tx.objectStore(store);
+    rows.forEach(r=>os.put(r));
+    tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
+  });
+};
+
+// ═══════════════════════════════════════════════════════════
+// DEMO DATA
+// ═══════════════════════════════════════════════════════════
+const DEMO_SALES = [
+  {id:1, date:"2026-05-12",tipo:"venta",     producto:"iPhone 15",                  categoria:"Teléfonos", qty:1,precio:14500,costo:12500,nota:""},
+  {id:2, date:"2026-05-12",tipo:"venta",     producto:"Cable USB-C",                categoria:"Accesorios",qty:3,precio:120,  costo:50,   nota:""},
+  {id:3, date:"2026-05-13",tipo:"venta",     producto:"Samsung Galaxy A55",         categoria:"Teléfonos", qty:1,precio:8500, costo:7100, nota:""},
+  {id:4, date:"2026-05-13",tipo:"venta",     producto:"Funda iPhone 15",            categoria:"Accesorios",qty:2,precio:220,  costo:80,   nota:""},
+  {id:5, date:"2026-05-14",tipo:"reparacion",producto:"Cambio pantalla iPhone 12",  categoria:"Reparación",qty:1,precio:2200, costo:900,  nota:"Cliente: Juan Pérez"},
+  {id:6, date:"2026-05-15",tipo:"reparacion",producto:"Limpieza laptop HP",         categoria:"Reparación",qty:1,precio:650,  costo:100,  nota:"Garantía 30 días"},
+  {id:7, date:"2026-05-15",tipo:"venta",     producto:"AirPods Pro",                categoria:"Accesorios",qty:1,precio:4800, costo:3700, nota:""},
+  {id:8, date:"2026-05-16",tipo:"venta",     producto:"Xiaomi Redmi 13",            categoria:"Teléfonos", qty:2,precio:5200, costo:4300, nota:""},
+  {id:9, date:"2026-05-17",tipo:"reparacion",producto:"Cambio batería Samsung",     categoria:"Reparación",qty:1,precio:900,  costo:300,  nota:""},
+  {id:10,date:"2026-05-18",tipo:"venta",     producto:"Protector de pantalla",      categoria:"Accesorios",qty:5,precio:95,   costo:30,   nota:""},
+  {id:11,date:"2026-05-19",tipo:"venta",     producto:"iPhone 14 Pro",              categoria:"Teléfonos", qty:1,precio:19000,costo:16500,nota:""},
+  {id:12,date:"2026-05-20",tipo:"reparacion",producto:"Placa madre laptop Dell",    categoria:"Reparación",qty:1,precio:3200, costo:1500, nota:"Urgente"},
+  {id:13,date:"2026-05-21",tipo:"venta",     producto:"Power Bank 20000mAh",        categoria:"Accesorios",qty:2,precio:850,  costo:480,  nota:""},
+  {id:14,date:"2026-05-22",tipo:"reparacion",producto:"Cambio pantalla Samsung A54",categoria:"Reparación",qty:1,precio:1600, costo:650,  nota:""},
+  {id:15,date:"2026-05-22",tipo:"venta",     producto:"Moto G84",                   categoria:"Teléfonos", qty:1,precio:7400, costo:6100, nota:""},
+];
+const DEMO_INV = [
+  {id:1,nombre:"iPhone 15",          categoria:"Teléfonos", stock:4, costo:12500,precio:14500},
+  {id:2,nombre:"Samsung Galaxy A55", categoria:"Teléfonos", stock:6, costo:7100, precio:8500},
+  {id:3,nombre:"Xiaomi Redmi 13",    categoria:"Teléfonos", stock:10,costo:4300, precio:5200},
+  {id:4,nombre:"Moto G84",           categoria:"Teléfonos", stock:5, costo:6100, precio:7400},
+  {id:5,nombre:"AirPods Pro",        categoria:"Accesorios",stock:8, costo:3700, precio:4800},
+  {id:6,nombre:"Cable USB-C",        categoria:"Accesorios",stock:50,costo:50,   precio:120},
+  {id:7,nombre:"Funda iPhone 15",    categoria:"Accesorios",stock:20,costo:80,   precio:220},
+  {id:8,nombre:"Protector pantalla", categoria:"Accesorios",stock:40,costo:30,   precio:95},
+  {id:9,nombre:"Power Bank 20000mAh",categoria:"Accesorios",stock:12,costo:480,  precio:850},
+];
+
+// ═══════════════════════════════════════════════════════════
+// ESTADO GLOBAL
+// ═══════════════════════════════════════════════════════════
+let SALES = [], INV = [], currentPage = "dashboard";
+
+// ═══════════════════════════════════════════════════════════
+// NAVEGACIÓN
+// ═══════════════════════════════════════════════════════════
+function goPage(p){
+  document.querySelectorAll(".page").forEach(el=>el.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(el=>el.classList.remove("active"));
+  document.getElementById("pg-"+p).classList.add("active");
+  document.getElementById("nb-"+p).classList.add("active");
+  currentPage = p;
+  if(p==="dashboard") renderDashboard();
+  if(p==="ops")       renderOps();
+  if(p==="inv")       renderInv();
+  if(p==="reportes")  renderReportes();
+}
+
+// ═══════════════════════════════════════════════════════════
+// HTML HELPERS
+// ═══════════════════════════════════════════════════════════
+function kpiHTML(icon,label,value,sub,color,trend){
+  const tc = trend>=0?"#00E676":"#FF4444";
+  const ta = trend>=0?"▲":"▼";
+  return `<div class="kpi" style="box-shadow:0 0 24px ${color}15">
+    <div class="kpi-circle" style="background:${color}15"></div>
+    <div class="kpi-icon">${icon}</div>
+    <div class="kpi-label">${label}</div>
+    <div class="kpi-value" style="color:${color}">${value}</div>
+    ${sub?`<div class="kpi-sub">${sub}</div>`:""}
+    ${trend!==undefined?`<div class="kpi-trend" style="color:${tc}">${ta} ${Math.abs(trend).toFixed(1)}% vs sem. anterior</div>`:""}
+  </div>`;
+}
+
+function tagHTML(label,color){
+  return `<span class="tag" style="background:${color}22;color:${color};border:1px solid ${color}44">${label}</span>`;
+}
+
+function barChartHTML(data,color){
+  const max = Math.max(...data.map(d=>d.value),1);
+  return `<div class="bar-wrap">
+    ${data.map(d=>`<div class="bar-col">
+      <div class="bar-fill" style="height:${Math.max((d.value/max)*62,3)}px;
+        background:linear-gradient(180deg,${color},${color}66);box-shadow:0 0 6px ${color}44" title="${fmt(d.value)}"></div>
+      <div class="bar-lbl">${d.label}</div>
+    </div>`).join("")}
+  </div>`;
+}
+
+function progHTML(label,value,total,color){
+  const p = total===0?0:(value/total)*100;
+  return `<div class="prog-wrap">
+    <div class="prog-top">
+      <span style="color:#E8F0FE;font-size:13px">${esc(label)}</span>
+      <span style="color:${color};font-weight:700;font-size:13px">${fmt(value)} <span style="color:#7B8FAE;font-weight:400;font-size:11px">(${p.toFixed(1)}%)</span></span>
+    </div>
+    <div class="prog-bar-bg"><div class="prog-bar" style="width:${p}%;background:${color};box-shadow:0 0 6px ${color}55"></div></div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════
+function renderDashboard(){
+  const now = new Date();
+  const wa  = new Date(now); wa.setDate(now.getDate()-7);
+  const twa = new Date(now); twa.setDate(now.getDate()-14);
+  const tw  = SALES.filter(s=>new Date(s.date+"T12:00:00")>=wa);
+  const lw  = SALES.filter(s=>{ const d=new Date(s.date+"T12:00:00"); return d>=twa&&d<wa; });
+
+  const m = list => {
+    const v=list.filter(s=>s.tipo==="venta"), r=list.filter(s=>s.tipo==="reparacion");
+    return{
+      ingV:v.reduce((a,s)=>a+s.precio*s.qty,0),
+      ganV:v.reduce((a,s)=>a+(s.precio-s.costo)*s.qty,0),
+      ingR:r.reduce((a,s)=>a+s.precio*s.qty,0),
+      ganR:r.reduce((a,s)=>a+(s.precio-s.costo)*s.qty,0),
+      tx:list.length,
+    };
+  };
+  const t=m(tw), l=m(lw);
+
+  const pm={};
+  SALES.filter(s=>s.tipo==="venta").forEach(s=>{pm[s.producto]=(pm[s.producto]||0)+(s.precio-s.costo)*s.qty;});
+  const top = Object.entries(pm).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  const days = Array.from({length:7},(_,i)=>{
+    const d=new Date(now); d.setDate(now.getDate()-(6-i));
+    const ds=d.toISOString().split("T")[0];
+    return{label:d.toLocaleDateString("es-HN",{weekday:"short"}).slice(0,3),
+           value:SALES.filter(s=>s.date===ds).reduce((a,s)=>a+s.precio*s.qty,0)};
+  });
+
+  const rm={};
+  SALES.filter(s=>s.tipo==="reparacion").forEach(s=>{rm[s.producto]=(rm[s.producto]||0)+(s.precio-s.costo)*s.qty;});
+  const topR = Object.entries(rm).sort((a,b)=>b[1]-a[1]).slice(0,4);
+
+  document.getElementById("pg-dashboard").innerHTML = `
+    <div class="section-title">📊 Dashboard Semanal</div>
+    <div class="section-sub">Últimos 7 días — ${now.toLocaleDateString("es-HN",{weekday:"long",day:"numeric",month:"long"})}</div>
+
+    <div class="grid2">
+      ${kpiHTML("📱","Ingr. Ventas",  fmt(t.ingV),"esta semana","#00D4FF",pct(t.ingV,l.ingV))}
+      ${kpiHTML("💰","Gan. Ventas",   fmt(t.ganV),"utilidad",   "#00E676",pct(t.ganV,l.ganV))}
+      ${kpiHTML("🔧","Ingr. Reparac.",fmt(t.ingR),"esta semana","#FF6D00",pct(t.ingR,l.ingR))}
+      ${kpiHTML("🛠️","Gan. Reparac.", fmt(t.ganR),"utilidad",   "#A855F7",pct(t.ganR,l.ganR))}
+      ${kpiHTML("📋","Transacciones", t.tx,       "operaciones","#00D4FF",pct(t.tx,l.tx))}
+      ${kpiHTML("💵","Gan. Total",fmt(t.ganV+t.ganR),"ventas+reparac.","#00E676",undefined)}
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">📈 Ingresos diarios (7 días)</div>
+      ${barChartHTML(days,"#00D4FF")}
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:10px">🏆 Top Productos (ganancia)</div>
+      ${top.length===0?`<div style="color:#7B8FAE;font-size:13px">Sin datos aún</div>`:
+        top.map(([n,g],i)=>{
+          const p=top[0][1]===0?0:(g/top[0][1])*100;
+          return `<div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+              <span style="color:#7B8FAE;font-size:12px">${i+1}. ${esc(n)}</span>
+              <span style="color:#00E676;font-size:12px;font-weight:700">${fmt(g)}</span>
+            </div>
+            <div style="height:4px;background:#1E2A3A;border-radius:4px">
+              <div style="width:${p}%;height:100%;background:linear-gradient(90deg,#00E676,#00D4FF);border-radius:4px"></div>
+            </div>
+          </div>`;
+        }).join("")}
+    </div>
+
+    <div class="card">
+      <div style="font-weight:700;font-size:13px;margin-bottom:10px">🔧 Top Reparaciones</div>
+      ${topR.length===0?`<div style="color:#7B8FAE;font-size:13px">Sin reparaciones</div>`:
+        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          ${topR.map(([n,g],i)=>`
+            <div style="background:#0A0E1A;border-radius:10px;padding:10px 12px;border:1px solid #1E2A3A">
+              <div style="color:#7B8FAE;font-size:10px">#${i+1}</div>
+              <div style="font-size:12px;font-weight:700;margin:2px 0">${esc(n)}</div>
+              <div style="color:#FF6D00;font-size:15px;font-weight:800;font-family:'Orbitron',sans-serif">${fmt(g)}</div>
+            </div>`).join("")}
+        </div>`}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// OPERACIONES
+// ═══════════════════════════════════════════════════════════
+let opsFilter="todos", opsSearch="", opsShowForm=false;
+
+function renderOps(){
+  const filtered = SALES
+    .filter(s=>opsFilter==="todos"||s.tipo===opsFilter)
+    .filter(s=>s.producto.toLowerCase().includes(opsSearch.toLowerCase()))
+    .sort((a,b)=>b.date.localeCompare(a.date));
+  const ganTotal = filtered.reduce((a,s)=>a+(s.precio-s.costo)*s.qty,0);
+
+  const fbtns = ["todos","venta","reparacion"].map(f=>`
+    <button class="filter-btn" onclick="setOpsFilter('${f}')"
+      style="background:${opsFilter===f?"#00D4FF":"#111827"};
+             color:${opsFilter===f?"#000":"#7B8FAE"};
+             border-color:${opsFilter===f?"#00D4FF":"#1E2A3A"}">${f}</button>`).join("");
+
+  document.getElementById("pg-ops").innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="section-title" style="margin:0">📋 Operaciones</div>
+      <button class="${opsShowForm?"btn-accent":"btn-accent"}"
+        style="${opsShowForm?"background:#1E2A3A;color:#7B8FAE":""}"
+        onclick="toggleOpsForm()">${opsShowForm?"✕ Cancelar":"+ Nueva"}</button>
+    </div>
+
+    ${opsShowForm?`
+    <div class="form-box" id="ops-form">
+      <div style="color:#00D4FF;font-weight:700;margin-bottom:12px;font-size:14px">Nueva operación</div>
+      <div class="form-grid">
+        <div class="field"><label>Fecha</label><input type="date" id="f-date" value="${today()}"/></div>
+        <div class="field"><label>Tipo</label>
+          <select id="f-tipo" onchange="updateGanPreview()">
+            <option value="venta">venta</option><option value="reparacion">reparacion</option>
+          </select></div>
+        <div class="field" style="grid-column:1/-1"><label>Producto / Servicio</label>
+          <input type="text" id="f-prod" placeholder="Ej: iPhone 15"/></div>
+        <div class="field"><label>Categoría</label>
+          <select id="f-cat">
+            <option>Teléfonos</option><option>Accesorios</option><option>Reparación</option>
+          </select></div>
+        <div class="field"><label>Cantidad</label>
+          <input type="number" id="f-qty" value="1" min="1" oninput="updateGanPreview()"/></div>
+        <div class="field"><label>Precio venta (L)</label>
+          <input type="number" id="f-precio" placeholder="0" oninput="updateGanPreview()"/></div>
+        <div class="field"><label>Costo / insumos (L)</label>
+          <input type="number" id="f-costo" placeholder="0" oninput="updateGanPreview()"/></div>
+        <div class="field" style="grid-column:1/-1"><label>Nota (opcional)</label>
+          <input type="text" id="f-nota" placeholder="Cliente, garantía..."/></div>
+      </div>
+      <div id="gan-preview"></div>
+      <button class="btn-primary" style="background:#00E676;color:#000" onclick="saveOp()">✓ Guardar</button>
+    </div>`:""}
+
+    <div class="filter-wrap">${fbtns}</div>
+    <div class="search-wrap">
+      <input class="search-input" placeholder="🔍 Buscar producto..." value="${esc(opsSearch)}"
+        oninput="setOpsSearch(this.value)"/>
+    </div>
+    <div style="color:#00E676;font-weight:700;font-size:13px;margin-bottom:10px;text-align:right">
+      Ganancia visible: ${fmt(ganTotal)}
+    </div>
+
+    <div id="ops-list">
+      ${filtered.length===0?`<div style="color:#7B8FAE;text-align:center;padding:30px">Sin registros</div>`
+        :filtered.map(s=>{
+          const g=(s.precio-s.costo)*s.qty;
+          const tc=s.tipo==="venta"?"#00D4FF":"#FF6D00";
+          return `<div class="op-card">
+            <div class="op-top">
+              <div class="op-info">
+                <div class="op-meta">
+                  ${tagHTML(s.tipo,tc)}
+                  <span style="color:#7B8FAE;font-size:11px">${s.date}</span>
+                </div>
+                <div class="op-nombre">${esc(s.producto)}</div>
+                ${s.nota?`<div class="op-nota">${esc(s.nota)}</div>`:""}
+                <div class="op-nums">
+                  <span class="op-num" style="color:#7B8FAE">Qty: ${s.qty}</span>
+                  <span class="op-num" style="color:#E8F0FE;font-weight:600">Precio: ${fmt(s.precio*s.qty)}</span>
+                  <span class="op-num" style="color:${g>=0?"#00E676":"#FF4444"};font-weight:700">Gan: ${fmt(g)}</span>
+                </div>
+              </div>
+              <button class="del-btn" onclick="delSale(${s.id})">🗑</button>
+            </div>
+          </div>`;
+        }).join("")}
+    </div>
+    <div style="color:#3D4F6E;font-size:11px;text-align:right;margin-top:8px">
+      ${filtered.length} mostrados · ${SALES.length} en base de datos
+    </div>`;
+}
+
+function toggleOpsForm(){ opsShowForm=!opsShowForm; renderOps(); }
+function setOpsFilter(f){ opsFilter=f; renderOps(); }
+function setOpsSearch(v){ opsSearch=v; renderOps(); }
+
+function updateGanPreview(){
+  const p=parseFloat(document.getElementById("f-precio")?.value||0);
+  const c=parseFloat(document.getElementById("f-costo")?.value||0);
+  const q=parseFloat(document.getElementById("f-qty")?.value||1);
+  const el=document.getElementById("gan-preview");
+  if(el && p && c){
+    el.innerHTML=`<div class="ganancia-preview">Ganancia: ${fmt((p-c)*q)}</div>`;
+  } else if(el){ el.innerHTML=""; }
+}
+
+async function saveOp(){
+  const prod=document.getElementById("f-prod")?.value?.trim();
+  const precio=parseFloat(document.getElementById("f-precio")?.value||0);
+  const costo=parseFloat(document.getElementById("f-costo")?.value||0);
+  if(!prod||!precio||!costo){ alert("Completa: producto, precio y costo."); return; }
+  const rec={
+    id:Date.now(),
+    date:document.getElementById("f-date").value||today(),
+    tipo:document.getElementById("f-tipo").value,
+    producto:prod,
+    categoria:document.getElementById("f-cat").value,
+    qty:parseInt(document.getElementById("f-qty").value||1),
+    precio, costo,
+    nota:document.getElementById("f-nota")?.value?.trim()||"",
+  };
+  await dbPut("sales",rec);
+  SALES.push(rec);
+  opsShowForm=false;
+  updateHeader();
+  renderOps();
+  if(currentPage==="dashboard") renderDashboard();
+}
+
+async function delSale(id){
+  if(!confirm("¿Eliminar este registro?")) return;
+  await dbDel("sales",id);
+  SALES=SALES.filter(s=>s.id!==id);
+  updateHeader();
+  renderOps();
+  if(currentPage==="dashboard") renderDashboard();
+}
+
+// ═══════════════════════════════════════════════════════════
+// INVENTARIO
+// ═══════════════════════════════════════════════════════════
+let invShowForm=false;
+
+function renderInv(){
+  const tv=INV.reduce((a,i)=>a+i.stock*i.costo,0);
+  const tp=INV.reduce((a,i)=>a+i.stock*i.precio,0);
+  const bajo=INV.filter(i=>i.stock<=2).length;
+  const badge=document.getElementById("stock-badge");
+  badge.style.display=bajo>0?"block":"none";
+  if(bajo>0) badge.textContent=bajo;
+
+  const cats=["Teléfonos","Accesorios","Refacciones"];
+
+  document.getElementById("pg-inv").innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="section-title" style="margin:0">📦 Inventario</div>
+      <button class="btn-purple" style="${invShowForm?"background:#1E2A3A;color:#7B8FAE":""}"
+        onclick="toggleInvForm()">${invShowForm?"✕ Cancelar":"+ Agregar"}</button>
+    </div>
+
+    <div class="grid2" style="margin-bottom:14px">
+      ${kpiHTML("📦","Productos",   INV.length,          "","#A855F7",undefined)}
+      ${kpiHTML("💰","Valor inv.",  fmt(tv),"costo total","#FF6D00",undefined)}
+      ${kpiHTML("📈","Val. potencial",fmt(tp),"precio venta","#00E676",undefined)}
+      ${kpiHTML("🏦","Gan. potencial",fmt(tp-tv),"margen total","#00D4FF",undefined)}
+    </div>
+
+    ${invShowForm?`
+    <div class="form-box">
+      <div class="form-grid">
+        <div class="field" style="grid-column:1/-1"><label>Nombre del producto</label>
+          <input type="text" id="i-nombre" placeholder="Ej: Samsung A35"/></div>
+        <div class="field"><label>Categoría</label>
+          <select id="i-cat"><option>Teléfonos</option><option>Accesorios</option><option>Refacciones</option></select></div>
+        <div class="field"><label>Stock inicial</label>
+          <input type="number" id="i-stock" value="1" min="0"/></div>
+        <div class="field"><label>Costo (L)</label>
+          <input type="number" id="i-costo" placeholder="0" oninput="updateInvPreview()"/></div>
+        <div class="field"><label>Precio de venta (L)</label>
+          <input type="number" id="i-precio" placeholder="0" oninput="updateInvPreview()"/></div>
+      </div>
+      <div id="inv-preview"></div>
+      <button class="btn-primary" style="background:#A855F7;color:#fff" onclick="saveItem()">✓ Agregar</button>
+    </div>`:""}
+
+    ${cats.map(cat=>{
+      const items=INV.filter(i=>i.categoria===cat);
+      if(!items.length) return "";
+      return `<div class="cat-header">${cat}</div>
+        ${items.map(item=>`
+          <div class="inv-card${item.stock<=2?" bajo":""}">
+            <div class="inv-top">
+              <div>
+                <div class="inv-nombre">${esc(item.nombre)}</div>
+                ${item.stock===0?`<div class="inv-alert">🚫 AGOTADO</div>`
+                  :item.stock<=2?`<div class="inv-alert">⚠ STOCK BAJO</div>`:""}
+              </div>
+              <button class="del-btn" onclick="delItem(${item.id})">🗑</button>
+            </div>
+            <div class="inv-grid">
+              <div class="inv-cell">
+                <div class="inv-cell-label">Stock</div>
+                <div class="stock-ctrl">
+                  <button class="stock-btn" style="background:#FF444433;color:#FF4444"
+                    onclick="updStock(${item.id},-1)">−</button>
+                  <span class="stock-num" style="color:${item.stock<=2?"#FF4444":"#E8F0FE"}">${item.stock}</span>
+                  <button class="stock-btn" style="background:#00E67633;color:#00E676"
+                    onclick="updStock(${item.id},1)">+</button>
+                </div>
+              </div>
+              <div class="inv-cell">
+                <div class="inv-cell-label">Costo</div>
+                <div class="inv-cell-val" style="color:#FF6D00">${fmt(item.costo)}</div>
+              </div>
+              <div class="inv-cell">
+                <div class="inv-cell-label">Precio</div>
+                <div class="inv-cell-val" style="color:#E8F0FE">${fmt(item.precio)}</div>
+              </div>
+              <div class="inv-cell">
+                <div class="inv-cell-label">Margen</div>
+                <div class="inv-cell-val" style="color:#00E676">${fmt(item.precio-item.costo)}</div>
+              </div>
+            </div>
+          </div>`).join("")}`;
+    }).join("")}`;
+}
+
+function toggleInvForm(){ invShowForm=!invShowForm; renderInv(); }
+
+function updateInvPreview(){
+  const p=parseFloat(document.getElementById("i-precio")?.value||0);
+  const c=parseFloat(document.getElementById("i-costo")?.value||0);
+  const el=document.getElementById("inv-preview");
+  if(el && p && c){
+    const m=p-c, pct=c>0?((m/c)*100).toFixed(1):0;
+    el.innerHTML=`<div class="ganancia-preview">Margen: ${fmt(m)} (${pct}%)</div>`;
+  } else if(el){ el.innerHTML=""; }
+}
+
+async function saveItem(){
+  const nombre=document.getElementById("i-nombre")?.value?.trim();
+  const precio=parseFloat(document.getElementById("i-precio")?.value||0);
+  const costo=parseFloat(document.getElementById("i-costo")?.value||0);
+  const stock=parseInt(document.getElementById("i-stock")?.value||0);
+  if(!nombre||!precio){ alert("Completa nombre y precio."); return; }
+  const rec={id:Date.now(),nombre,
+    categoria:document.getElementById("i-cat").value,
+    stock,costo,precio};
+  await dbPut("inventory",rec);
+  INV.push(rec);
+  invShowForm=false;
+  updateHeader();
+  renderInv();
+}
+
+async function delItem(id){
+  if(!confirm("¿Eliminar este producto?")) return;
+  await dbDel("inventory",id);
+  INV=INV.filter(i=>i.id!==id);
+  updateHeader();
+  renderInv();
+}
+
+async function updStock(id,delta){
+  const idx=INV.findIndex(i=>i.id===id);
+  if(idx===-1) return;
+  INV[idx].stock=Math.max(0,INV[idx].stock+delta);
+  await dbPut("inventory",INV[idx]);
+  renderInv();
+}
+
+// ═══════════════════════════════════════════════════════════
+// REPORTES
+// ═══════════════════════════════════════════════════════════
+function renderReportes(){
+  const wm={};
+  SALES.forEach(s=>{ const w=wkLbl(s.date); if(!wm[w]) wm[w]=[]; wm[w].push(s); });
+  const weeks=Object.entries(wm).map(([label,items])=>{
+    const v=items.filter(i=>i.tipo==="venta"), r=items.filter(i=>i.tipo==="reparacion");
+    return{label,
+      ingV:v.reduce((a,i)=>a+i.precio*i.qty,0), ganV:v.reduce((a,i)=>a+(i.precio-i.costo)*i.qty,0),
+      ingR:r.reduce((a,i)=>a+i.precio*i.qty,0), ganR:r.reduce((a,i)=>a+(i.precio-i.costo)*i.qty,0),
+      nV:v.length, nR:r.length};
+  });
+
+  const cm={};
+  SALES.filter(s=>s.tipo==="venta").forEach(s=>{ cm[s.categoria]=(cm[s.categoria]||0)+(s.precio-s.costo)*s.qty; });
+  const catTotal=Object.values(cm).reduce((a,b)=>a+b,0);
+
+  const totalIng=SALES.reduce((a,s)=>a+s.precio*s.qty,0);
+  const totalGan=SALES.reduce((a,s)=>a+(s.precio-s.costo)*s.qty,0);
+
+  document.getElementById("pg-reportes").innerHTML=`
+    <div class="section-title">📆 Reportes Semanales</div>
+    <div class="section-sub">Histórico completo de tu negocio</div>
+
+    <div class="grid2" style="margin-bottom:14px">
+      ${kpiHTML("📊","Ingresos hist.",fmt(totalIng),"todos los registros","#00D4FF",undefined)}
+      ${kpiHTML("💵","Ganancia hist.",fmt(totalGan),"todos los registros","#00E676",undefined)}
+      ${kpiHTML("📋","Total ops.",    SALES.length, "en base de datos",  "#A855F7",undefined)}
+      ${kpiHTML("📅","Semanas",       weeks.length, "con datos",         "#FF6D00",undefined)}
+    </div>
+
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="card">
+        <div style="font-weight:700;font-size:13px">💰 Gan. Ventas/semana</div>
+        ${barChartHTML(weeks.slice(-7).map(w=>({label:w.label,value:w.ganV})),"#00E676")}
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:13px">🔧 Gan. Reparac./semana</div>
+        ${barChartHTML(weeks.slice(-7).map(w=>({label:w.label,value:w.ganR})),"#FF6D00")}
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>Semana</th><th>Ing. Ventas</th><th>Gan. Ventas</th>
+          <th>Ing. Reparac.</th><th>Gan. Reparac.</th><th>V</th><th>R</th>
+        </tr></thead>
+        <tbody>
+          ${weeks.length===0?`<tr><td colspan="7" style="color:#7B8FAE;text-align:center;padding:20px">Sin datos</td></tr>`
+            :weeks.map(w=>`<tr>
+              <td style="color:#00D4FF;font-weight:700;font-family:'Orbitron',sans-serif;font-size:10px">${w.label}</td>
+              <td style="color:#E8F0FE">${fmt(w.ingV)}</td>
+              <td style="color:#00E676;font-weight:700">${fmt(w.ganV)}</td>
+              <td style="color:#E8F0FE">${fmt(w.ingR)}</td>
+              <td style="color:#FF6D00;font-weight:700">${fmt(w.ganR)}</td>
+              <td style="color:#7B8FAE;text-align:center">${w.nV}</td>
+              <td style="color:#7B8FAE;text-align:center">${w.nR}</td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:700;font-size:13px;margin-bottom:12px">🏷 Ganancia por Categoría</div>
+      ${Object.keys(cm).length===0?`<div style="color:#7B8FAE">Sin datos</div>`
+        :Object.entries(cm).map(([cat,val])=>{
+          const color=cat==="Teléfonos"?"#00D4FF":cat==="Accesorios"?"#A855F7":"#FF6D00";
+          return progHTML(cat,val,catTotal,color);
+        }).join("")}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// HEADER
+// ═══════════════════════════════════════════════════════════
+function updateHeader(){
+  document.getElementById("db-status").textContent=`● ${SALES.length} ops · ${INV.length} productos`;
+  document.getElementById("hoy-fecha").textContent=
+    new Date().toLocaleDateString("es-HN",{day:"numeric",month:"short",year:"numeric"});
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+document.getElementById("pg-dashboard").innerHTML=`
+  <div class="spinner-wrap"><div class="spinner"></div>
+  <div class="spinner-txt">CARGANDO BASE DE DATOS...</div></div>`;
+
+(async()=>{
+  try{
+    const [sc,ic]=await Promise.all([dbCount("sales"),dbCount("inventory")]);
+    if(sc===0) await dbBulk("sales",    DEMO_SALES);
+    if(ic===0) await dbBulk("inventory",DEMO_INV);
+    const [s,i]=await Promise.all([dbAll("sales"),dbAll("inventory")]);
+    SALES=s; INV=i;
+    updateHeader();
+    renderDashboard();
+  }catch(e){
+    document.getElementById("pg-dashboard").innerHTML=`
+      <div class="error-wrap">
+        <div style="font-size:48px">⚠️</div>
+        <div style="color:#FF4444;font-family:'Orbitron',sans-serif;font-size:15px">Error de base de datos</div>
+        <div style="color:#7B8FAE;font-size:13px;max-width:300px">${esc(e.message)}</div>
+        <div style="color:#3D4F6E;font-size:11px;max-width:300px">
+          Abre este archivo en Safari normal (no en modo privado/incógnito). IndexedDB no funciona en modo privado en iOS.
+        </div>
+      </div>`;
+  }
+})();
+</script>
+</body>
+</html>
